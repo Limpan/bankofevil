@@ -1,0 +1,28 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+{% block content %}
+<div class="row" style="margin-top: 25%">
+  <div class="two columns">&nbsp;</div>
+  <div class="eight columns">
+    <h1>Bank of Phony</h1>
+    <p>Welcome to the bank of the universe.</p>
+    <p>After you register an account you can use our API to make your fortune.</p>
+
+    <form method="POST" action="/">
+      <h4>Register account</h4>
+      {{ form.csrf_token }}
+      {{ render_field(form.email, class="u-full-width") }}
+      {{ render_field(form.password, class="u-full-width") }}
+      <input id="{{ form.submit.id }}" name="{{ form.submit.name }}" type="submit" value="{{ form.submit.name.title() }}" class="button-primary u-pull-right">
+      <div class="u-cf"></div>
+    </form>
+
+    <h4>Access API</h4>
+    <p></p>
+    <pre><code>
+import requests
+r = requests.get({{ url_for('api.accounts') }})
+    </code></pre>
+  <div>
+</div>
+{% endblock %}
