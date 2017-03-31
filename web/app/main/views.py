@@ -1,4 +1,5 @@
-from flask import render_template
+from flask import current_app, render_template
+from flask_login import login_user
 from . import main
 from .forms import RegisterForm
 from .. import db
@@ -13,5 +14,5 @@ def index():
         user = User(email=form.email.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
-        current_app.logger.info('Creating user %()s' % user)
+        current_app.logger.info('Creating user %s' % user)
     return render_template('index.html', form=form)

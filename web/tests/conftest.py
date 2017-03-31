@@ -1,5 +1,6 @@
 import pytest
 from app import create_app
+from app import db as _db
 
 
 @pytest.fixture(scope='session')
@@ -13,7 +14,6 @@ def app(request):
         ctx.pop()
 
     request.addfinalizer(teardown)
-
     return app
 
 
@@ -23,7 +23,6 @@ def db(app, request):
     _db.init_app(app)
     _db.create_all()
     _db.session.commit()
-    Role.insert_roles()
 
     def teardown():
         _db.session.close_all()

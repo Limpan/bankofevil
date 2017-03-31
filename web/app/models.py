@@ -1,8 +1,9 @@
 from flask import current_app
-from flask_login import UserMixin, login_manager
+from flask_login import UserMixin
 from . import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
+                         BadSignature, SignatureExpired
 from sqlalchemy_utils import ArrowType
 import arrow
 
@@ -10,7 +11,7 @@ import arrow
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(254), index = True)
+    email = db.Column(db.String(254), index=True)
     password_hash = db.Column(db.String(128))
     registered_at = db.Column(ArrowType, default=arrow.utcnow)
     last_seen = db.Column(ArrowType, default=arrow.utcnow)
@@ -27,12 +28,12 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def generate_auth_token(self, expiration=600):
-        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'id': self.id})
 
     @staticmethod
     def verify_auth_token(token):
-        s = Serializer(app.config['SECRET_KEY'])
+        s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
         except SignatureExpired:
@@ -46,6 +47,9 @@ class User(UserMixin, db.Model):
         user = User.query.get(data['id'])
         return user
 
+    def __repr__(self):
+        return '<User: {} ({})>'.format(self.id, self.email)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -57,13 +61,6 @@ class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     account_number = db.Column(db.String(8), index=True, unique=True)
     balance = db.Column(db.Float)
-
-
-class Stock(db.Model):
-    __tablename__ = 'stocks'
-    id = db.Column(db.String(4), primary_key=True)
-    company = db.Column(db.String(64))
-    # value = db.Column(db.Float)
 
 
 class Fund(db.Model):
