@@ -2,11 +2,14 @@ from flask import current_app, jsonify
 from flask_login import login_required
 from . import api
 from .. import login_manager
+from ..models import User
 
 
-@login_manager.header_loader
+@login_manager.request_loader
 def load_user_from_request(request):
     api_key = request.headers.get('Authorization')
+    if not api_key:
+        return None
     api_key = api_key.replace('Token', '', 1).strip()
     return User.verify_auth_token(api_key)
 

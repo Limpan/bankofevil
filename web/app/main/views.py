@@ -15,4 +15,4 @@ def index():
         db.session.add(user)
         db.session.commit()
         current_app.logger.info('Creating user %s' % user)
-    return render_template('index.html', form=form)
+    return render_template('main/index.html', form=form)
