@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.6"
+services:
+  - postgresql
+install:
+  - pip install -r web/requirements.txt
+before_script:
+  - psql -c 'CREATE DATABASE travis_ci_test;' -U postgres
+  - cd web
+  - ./manage.py deploy
+script:
+  - ./manage.py test
+notifications:
+  - email: false

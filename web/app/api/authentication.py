@@ -19,6 +19,7 @@ def load_user_from_request(request):
         return user
 
     # Try to login using basic auth...
+    current_app.logger.debug('%s' % auth)
     credentials = auth.replace('Basic', '', 1)
     try:
          email, password = base64.b64decode(credentials).split(b':', 1)

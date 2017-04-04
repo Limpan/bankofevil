@@ -17,10 +17,9 @@ def test_token_endpoint(app, db):
     db.session.add(u)
     db.session.commit()
 
-    h = Headers()
-    h.add('Authorization', 'Basic {auth}'.format(auth=base64.b64encode(b'test@example.com:cat')))
     client = app.test_client()
+    auth = 'Basic {}'.format(base64.b64encode(b'test@example.com:cat').decode('ascii'))
     rv = client.get(url_for('api.get_auth_token'),
-                    headers=h)
+                    headers={'Authorization': auth})
     data = json.loads(rv.data)
     assert u == User.verify_auth_token(data['token'])

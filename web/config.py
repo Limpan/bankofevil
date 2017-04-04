@@ -25,12 +25,12 @@ class TestingConfig(Config):
     WTF_CSRF_ENABLED = False
     SERVER_NAME = 'localhost'
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URI') or \
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TESTING_DATABASE_URI') or \
     'postgresql+psycopg2://postgres:secretpassword@postgresql/testing'
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URI') or \
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or \
     'postgresql+psycopg2://postgres:secretpassword@postgresql/production'
 
 
