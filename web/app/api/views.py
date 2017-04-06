@@ -67,7 +67,7 @@ api.add_url_rule('/stocks/<string:stock_id>', view_func=stock_view, methods=['GE
 # @api.route('/')
 # def index():
 #     """Default application route."""
-#     msg = {'message': 'Welcome to Bank of Phony.'}
+#     msg = {'message': 'Welcome to Bank of Evil.'}
 #     resp = jsonify(msg)
 #     resp.status_code = 200
 #     return resp
