@@ -1,4 +1,5 @@
 from flask import Flask
+from app.response import JSONResponse
 from config import config
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -14,6 +15,7 @@ sentry = Sentry()
 def create_app(config_name):
     """Application factory, see docs."""
     app = Flask(__name__)
+    app.response_class = JSONResponse
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 

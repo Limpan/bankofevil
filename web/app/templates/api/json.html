@@ -1,0 +1,10 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="twelwe columns">
+{{ json|tojson }}
+  </div>
+</div>
+</div>
+{% endblock %}
