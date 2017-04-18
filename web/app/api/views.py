@@ -3,11 +3,6 @@ from flask import current_app, jsonify
 from . import api
 from .. import db, login_manager
 
-def auto_type(f):
-    def decorated_function(*args, **kwargs):
-        best = request.accept_mimetypes.best_match(['application/json', 'text/html'])
-        if best == 'application/json' and request.mimetypes[best] > request.accept_mimetypes['text/html']:
-            
 
 class AccountView(MethodView):
 #    decorators = []
@@ -15,7 +10,7 @@ class AccountView(MethodView):
     def get(self, user_id):
         if user_id is None:
             # List all resources
-            return jsonify({ 'list': 'values' })
+            return { 'data': 'xxx' }, 203
         else:
             # Return specific resource
             return jsonify({'single': 'value'})
