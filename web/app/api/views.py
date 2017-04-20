@@ -5,14 +5,15 @@ from .. import db, login_manager
 
 
 class AccountView(MethodView):
-    #    decorators = [user_required]
+#    decorators = []
 
     def get(self, user_id):
         if user_id is None:
             # List all resources
-            return jsonify({ 'list': 'values' })
+            return { 'data': 'xxx' }, 203
         else:
-            pass  # Return specific resource
+            # Return specific resource
+            return jsonify({'single': 'value'})
 
 
     def post(self):
@@ -67,7 +68,7 @@ api.add_url_rule('/stocks/<string:stock_id>', view_func=stock_view, methods=['GE
 # @api.route('/')
 # def index():
 #     """Default application route."""
-#     msg = {'message': 'Welcome to Bank of Phony.'}
+#     msg = {'message': 'Welcome to Bank of Evil.'}
 #     resp = jsonify(msg)
 #     resp.status_code = 200
 #     return resp

@@ -16,7 +16,7 @@ def api_headers(email, password):
 def test_home_page(app):
     rv = app.test_client().get(url_for('main.index'))
     assert rv.status_code == 200
-    assert b'Bank of Phony' in rv.data
+    assert b'Bank of Evil' in rv.data
 
 
 def test_token_endpoint(app, db):
