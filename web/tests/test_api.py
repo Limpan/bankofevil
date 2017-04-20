@@ -25,5 +25,10 @@ def test_list_accounts(app, db):
 
     client = app.test_client()
     rv = client.get(url_for('api.accounts'), headers=get_token_headers('test@example.com'))
-    data = json.loads(rv.data)
-    assert data.accounts
+    accounts = sorted(json.loads(rv.data)['data'], key=lambda x: x['number'])
+    assert len(accounts) == 2
+    assert accounts[0]['number'] == '14054320'
+    assert accounts[0]['balance'] == 1000
+    assert accounts[0]['number'] == '24570434'
+    assert accounts[0]['balance'] == 500
+    assert data['data'] == 'xxx'
