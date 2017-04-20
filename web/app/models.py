@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     registered_at = db.Column(ArrowType, default=arrow.utcnow)
     last_seen = db.Column(ArrowType, default=arrow.utcnow)
+    accounts = db.relationship('Account', backref='holder', lazy='dynamic')
 
     @property
     def password(self):
@@ -59,8 +60,9 @@ def load_user(user_id):
 class Account(db.Model):
     __tablename__ = 'accounts'
     id = db.Column(db.Integer, primary_key=True)
-    account_number = db.Column(db.String(8), index=True, unique=True)
-    balance = db.Column(db.Float)
+    number = db.Column(db.String(8), index=True, unique=True)
+    balance = db.Column(db.Numeric(precision=12, scale=2), default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 class Fund(db.Model):
