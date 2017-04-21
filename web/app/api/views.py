@@ -1,16 +1,19 @@
 from flask.views import MethodView
 from flask import current_app, jsonify, abort
-from flask_login import login_required
+from flask_login import login_required, current_user
 from . import api
 
 
 class AccountView(MethodView):
     decorators = [login_required]
 
-    def get(self, user_id):
-        if user_id is None:
+    def get(self, account_id):
+        if account_id is None:
             # List all resources
-            return { 'data': 'xxx' }, 203
+            accounts = []
+            for a in current_user.accounts:
+                accounts.append({ 'id': a.number, 'number': a.number, 'balance': a.balance })
+            return { 'data': accounts }
         else:
             # Return specific resource
             return jsonify({'single': 'value'})
@@ -27,7 +30,7 @@ class AccountView(MethodView):
 
 
 account_view = AccountView.as_view('accounts')
-api.add_url_rule('/accounts/', defaults={'user_id': None},
+api.add_url_rule('/accounts/', defaults={'account_id': None},
                  view_func=account_view, methods=['GET'])
 api.add_url_rule('/accounts/', view_func=account_view, methods=['POST'])
 api.add_url_rule('/accounts/<int:user_id>', view_func=account_view, methods=['GET', 'PUT', 'DELETE'])

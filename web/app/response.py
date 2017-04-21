@@ -1,5 +1,5 @@
 from flask import request, Response, render_template, make_response, jsonify
-import json
+import simplejson as json
 
 class JSONResponse(Response):
     @classmethod
