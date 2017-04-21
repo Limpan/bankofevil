@@ -1,11 +1,11 @@
 from flask.views import MethodView
-from flask import current_app, jsonify
+from flask import current_app, jsonify, abort
+from flask_login import login_required
 from . import api
-from .. import db, login_manager
 
 
 class AccountView(MethodView):
-#    decorators = []
+    decorators = [login_required]
 
     def get(self, user_id):
         if user_id is None:
