@@ -13,6 +13,22 @@ def get_token_headers(email):
     }
 
 
+def test_show_single_account(app, db):
+    user = User(email='test@example.com', password='cat')
+    account = Account(number='34564123', balance=1000)
+    user.accounts = [account]
+    db.session.add(user)
+    db.session.add(account)
+    db.session.commit()
+
+    client = app.test_client()
+    rv = client.get(url_for('api.accounts', account_id='34564123'), headers=get_token_headers('test@example.com'))
+    data = json.loads(rv.data)
+    print(data)
+    assert data['account'] == '34564123'
+    assert data['balance'] == 1000
+
+
 def test_list_single_account(app, db):
     user = User(email='test@example.com', password='cat')
     account = Account(number='92142030', balance=1000)

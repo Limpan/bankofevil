@@ -2,6 +2,7 @@ from flask.views import MethodView
 from flask import current_app, jsonify, abort
 from flask_login import login_required, current_user
 from . import api
+from ..models import Account
 
 
 class AccountView(MethodView):
@@ -16,16 +17,19 @@ class AccountView(MethodView):
             return { 'data': accounts }
         else:
             # Return specific resource
-            return jsonify({'single': 'value'})
+            account = Account.query.get(account_id)
+            if account is None:
+                return {'error': 'No account found.'}, 401
+            return {'data': {'id': account.number, 'number': account.number, 'balance': account.number}}
 
 
     def post(self):
-        pass  # Create new resource
+        pass
 
-    def delete(self, user_id):
+    def delete(self, account_id):
         pass  # Delete resource
 
-    def put(self, user_id):
+    def put(self, account_id):
         pass  # Update resource
 
 
@@ -33,10 +37,7 @@ account_view = AccountView.as_view('accounts')
 api.add_url_rule('/accounts/', defaults={'account_id': None},
                  view_func=account_view, methods=['GET'])
 api.add_url_rule('/accounts/', view_func=account_view, methods=['POST'])
-api.add_url_rule('/accounts/<int:user_id>', view_func=account_view, methods=['GET', 'PUT', 'DELETE'])
-
-
-
+api.add_url_rule('/accounts/<string:account_id>', view_func=account_view, methods=['GET', 'PUT', 'DELETE'])
 
 
 class StockView(MethodView):

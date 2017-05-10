@@ -8,6 +8,7 @@ from ..models import User
 
 @login_manager.request_loader
 def load_user_from_request(request):
+    current_app.logger.debug('Trying to authorize user...')
     auth = request.headers.get('Authorization')
     if not auth:
         return None
@@ -16,21 +17,22 @@ def load_user_from_request(request):
     token = auth.replace('Token', '', 1).strip()
     user = User.verify_auth_token(token)
     if user:
+        current_app.logger.debug('Authorized user %s with token.' % user.email)
         return user
 
     # Try to login using basic auth...
-    current_app.logger.debug('%s' % auth)
     credentials = auth.replace('Basic', '', 1)
     try:
          email, password = base64.b64decode(credentials).split(b':', 1)
-         current_app.logger.debug('%s, %s' % (email, password))
     except:
         return None
 
     user = User.query.filter_by(email=email.decode('UTF-8')).first()
     if user and user.verify_password(password):
+        current_app.logger.debug('Authorized user %s with basic auth.' % user.email)
         return user
 
+    current_app.logger.debug('Failed to authorize user.')
     return None
 
 
