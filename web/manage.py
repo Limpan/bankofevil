@@ -105,5 +105,32 @@ def deploy():
     upgrade()
 
 
+@cli.group()
+def docs():
+    """The commonly used Sphinx commands."""
+    pass
+
+
+@docs.command()
+def build():
+    source_dir = 'docs/source'
+    build_dir = 'docs/build'
+
+    args = ['sphinx-build', '-b html', source_dir, build_dir]
+    exit_code = os.system(' '.join(args))
+    raise SystemExit(exit_code)
+
+
+@docs.command()
+def test():
+    source_dir = 'docs/source'
+    build_dir = 'docs/build'
+
+    args = ['sphinx-build', '-b doctest', source_dir, build_dir]
+    exit_code = os.system(' '.join(args))
+    raise SystemExit(exit_code)
+
+
+
 if __name__ == '__main__':
     cli()
