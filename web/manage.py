@@ -132,6 +132,5 @@ def generate(email, challenge, zeroes):
     click.echo(output.format(solution=solution, count=count, challenge=challenge, zeroes=zeroes, email=email))
 
 
-
 if __name__ == '__main__':
     cli()

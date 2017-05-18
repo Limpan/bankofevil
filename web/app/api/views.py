@@ -17,10 +17,10 @@ class AccountView(MethodView):
             return { 'data': accounts }
         else:
             # Return specific resource
-            account = Account.query.get(account_id)
+            account = Account.query.filter_by(number=account_id).one()
             if account is None:
-                return {'error': 'No account found.'}, 401
-            return {'data': {'id': account.number, 'number': account.number, 'balance': account.number}}
+                return {'error': 'Not Found.'}, 404
+            return {'data': {'id': account.number, 'number': account.number, 'balance': account.balance }}
 
 
     def post(self):
