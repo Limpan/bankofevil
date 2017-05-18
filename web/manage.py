@@ -97,6 +97,16 @@ def lint(all, stats):
 
 
 @cli.command()
+@click.option('--builder', default='html', help='Sphinx builder to use.')
+def sphinx(builder):
+    """Build docs with sphinx."""
+    cmd = 'sphinx-build -b {builder} docs/source docs/build'.format(builder=builder)
+
+    exit_code = os.system(cmd)
+    raise SystemExit(exit_code)
+
+
+@cli.command()
 def deploy():
     """Deploy application."""
     from flask_migrate import upgrade
