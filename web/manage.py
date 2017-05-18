@@ -105,5 +105,33 @@ def deploy():
     upgrade()
 
 
+@cli.command()
+@click.option('--zeroes', default=4, help='Number of leading zeroes required.')
+@click.option('--challenge', default='', help='Challenge string. Usually ')
+@click.option('--email', default='test@example.com', help='Email used in construction of problem.')
+def generate(email, challenge, zeroes):
+    """Generate proof-of-work-token."""
+    import hashlib
+    solution = ' ' * 64
+    count = 0
+    while solution[:zeroes] != '0' * zeroes:
+        count += 1
+        solution = hashlib.sha256('{}-{}-{}'.format(email, challenge, count).encode('UTF-8')).hexdigest()
+
+    output = '''
+### Solution found after {count} tries. ###
+ e-mail: {email}
+ challenge: {challenge}
+ number_of_zeroes (difficulty): {zeroes}
+
+------------------------------------------------------------------------------
+       {solution}
+------------------------------------------------------------------------------
+'''
+
+    click.echo(output.format(solution=solution, count=count, challenge=challenge, zeroes=zeroes, email=email))
+
+
+
 if __name__ == '__main__':
     cli()

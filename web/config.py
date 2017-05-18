@@ -8,6 +8,8 @@ class Config():
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    PROOF_OF_WORK_NUMBER_OF_ZEROES = 6
+
     @staticmethod
     def init_app(app):
         pass

@@ -45,3 +45,21 @@ def test_expired_auth_token():
     token = u.generate_auth_token(expiration=0)
     time.sleep(1)
     assert User.verify_auth_token(token) is None
+
+
+def test_verify_pow_challenge():
+    u = User(email='test@example.com', pow_challenge='1231ad79')
+    assert u.verify_pow_challenge('52644813', '0000001ca483d104feb3c2da2efaa635a2f62b8c3cf22d0b3c39061300b93883')
+
+
+def test_invalid_pow_challenge():
+    u = User(email='test@example.com', pow_challenge='1231ad79')
+    assert not u.verify_pow_challenge('4813', '0000001ca483d104feb3c2da2efaa635a2f62b8c3cf22d0b3c39061300b93883')
+    assert not u.verify_pow_challenge('52644813', '0000001ca483d104fecf22d0b3c3906130b3c2da2efaa635a2f62b8c30b93883')
+
+
+def test_refresh_pow_challenge():
+    u = User(pow_challenge='1231ad79')
+    assert u.pow_challenge == '1231ad79'
+    u.refresh_pow_challenge()
+    assert not u.pow_challenge == '1231ad79'

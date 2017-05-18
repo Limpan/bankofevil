@@ -6,6 +6,8 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
                          BadSignature, SignatureExpired
 from sqlalchemy_utils import ArrowType
 import arrow
+import uuid
+import hashlib
 
 
 class User(UserMixin, db.Model):
@@ -16,6 +18,7 @@ class User(UserMixin, db.Model):
     registered_at = db.Column(ArrowType, default=arrow.utcnow)
     last_seen = db.Column(ArrowType, default=arrow.utcnow)
     accounts = db.relationship('Account', backref='holder', lazy='dynamic')
+    pow_challenge = db.Column(db.String(8), default=lambda: str(uuid.uuid4())[:8])
 
     @property
     def password(self):
@@ -47,6 +50,20 @@ class User(UserMixin, db.Model):
             return None
         user = User.query.get(data['id'])
         return user
+
+
+    def refresh_pow_challenge(self):
+        self.pow_challenge = str(uuid.uuid4())[:8]
+
+
+    def verify_pow_challenge(self, answer, proof_of_work):
+        difficulty = current_app.config['PROOF_OF_WORK_NUMBER_OF_ZEROES']
+        if not proof_of_work[:difficulty] == '0' * difficulty:
+            return False
+
+        solution = '{email}-{challenge}-{answer}'.format(email=self.email, challenge=self.pow_challenge, answer=answer).encode('UTF-8')
+        return hashlib.sha256(solution).hexdigest() == proof_of_work
+
 
     def __repr__(self):
         return '<User: {} ({})>'.format(self.id, self.email)
