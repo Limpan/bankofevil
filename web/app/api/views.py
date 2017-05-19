@@ -9,6 +9,7 @@ class AccountView(MethodView):
     decorators = [login_required]
 
     def get(self, account_id):
+        """View account information."""
         if account_id is None:
             # List all resources
             accounts = []
@@ -24,12 +25,15 @@ class AccountView(MethodView):
 
 
     def post(self):
+        """Create account."""
         pass
 
     def delete(self, account_id):
+        """Remove account."""
         pass  # Delete resource
 
     def put(self, account_id):
+        """Transfer funds?"""
         pass  # Update resource
 
 
@@ -42,6 +46,7 @@ api.add_url_rule('/accounts/<string:account_id>', view_func=account_view, method
 
 class StockView(MethodView):
     def get(self, stock_id):
+        """View all information about stocks."""
         if stock_id is None:
             pass  # List all resources
         else:
