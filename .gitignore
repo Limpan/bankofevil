@@ -22,3 +22,4 @@ __pycache__
 .env
 .coverage
 tmp/
+web/docs/build/
