@@ -9,4 +9,4 @@ def unauthorized(e):
 
 @api.errorhandler(404)
 def unauthorized(e):
-    return {'errors': [{ 'status': '404', 'title': 'Unauthorized' }]}, 404
+    return {'errors': [{ 'status': '404', 'title': 'Not Found' }]}, 404
