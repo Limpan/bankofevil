@@ -1,6 +1,6 @@
 arrow==0.10.0
 click==6.7
-elizabeth==0.3.29
+mimesis==1.0.5
 flake8==3.3.0
 flask==0.12
 flask-bootstrap==3.3.7

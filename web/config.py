@@ -10,6 +10,8 @@ class Config():
 
     PROOF_OF_WORK_NUMBER_OF_ZEROES = 6
 
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL') or 'admin@example.com'
+
     @staticmethod
     def init_app(app):
         pass

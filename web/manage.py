@@ -116,13 +116,40 @@ def deploy():
 
 
 @cli.command()
+def dummy():
+    """Generate dummy data."""
+    from app.models import User
+    from app import db
+    from mimesis import Personal, Text
+
+    person = Personal()
+    text = Text()
+
+    email = os.environ.get('ADMIN_EMAIL') or 'admin@example.com'
+    password = '-'.join(text.words(3))
+    u = User(email = email,
+             password = password)
+    click.echo('Added user: {}\nPassword: {}'.format(email, password))
+    db.session.add(u)
+
+    for _ in range(9):
+        email, password = person.email(), '-'.join(text.words(3))
+        u = User(email = email, password = password)
+        click.echo('-' * 74)
+        click.echo('Added user: {}\nPassword: {}'.format(email, password))
+        db.session.add(u)
+
+    db.session.commit()
+
+
+@cli.command()
 @click.option('--zeroes', default=4, help='Number of leading zeroes required.')
 @click.option('--challenge', default='', help='Challenge string. Usually ')
 @click.option('--email', default='test@example.com', help='Email used in construction of problem.')
 def generate(email, challenge, zeroes):
     """Generate proof-of-work-token."""
     import hashlib
-    solution = ' ' * 64
+    solution = '1' * 64
     count = 0
     while solution[:zeroes] != '0' * zeroes:
         count += 1
